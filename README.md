@@ -1,6 +1,9 @@
 # psWSUSReporting
 This module is used for generating server compliance info from WSUS. It can also be used to approve updates for WSUS groups.
 
+## Examples
+
+### Get updates for a system that will be installed the next time the system installs updates
 ```
 PS C:\blah> Get-PoshWSUSComputerUpdates -FullDomainName box.ad.piccola.us -ApproveddownloadedAndReadyForInstall | select -First 2
 
@@ -27,6 +30,7 @@ IsSuperseded              : False
 SecurityBulletins         : {MS16-075}
 ```
 
+### For all the updates that could be applicable for members of the lab01.com WSUS group, list what is needed and calculate a compliance percentage.
 ```
 PS C:\blah> Get-PoshWSUSGroup -Name lab01.com  | Get-PoshWSUSGroupOverview | ft FullDomainName,Compliance,TotalMissingUpdates,CriticalUpdates,SecurityUpdates,LastSyncTime
 0
@@ -42,4 +46,48 @@ app01lab01.lab01.com 23.00 %                    154              15             
 app03lab01.lab01.com 23.00 %                    154              15             139 6/30/2016 4:04:46 AM
 app02lab01.lab01.com 23.00 %                    154              15             139 6/30/2016 6:48:57 AM
 dc01lab01.lab01.com  23.00 %                    154              15             139 6/30/2016 2:36:41 PM
+```
+
+### List all udpates for all members of the WSUS group ad.piccola.us that are needed regardless of approval. E.g. approved and downloaded/not-downloaded or not even approved.
+```
+PS C:\blah> Get-PoshWSUSGroup ad.piccola.us | Get-PoshWSUSGroupMembers | Get-PoshWSUSComputerUpdates -Needed | ft -a FullDomainName,KnowledgebaseArticles,UpdateInstallationState,UpdateApprovalAction
+
+FullDomainName        KnowledgebaseArticles UpdateInstallationState UpdateApprovalAction
+--------------        --------------------- ----------------------- --------------------
+{box.ad.piccola.us}   {3109560}                        NotInstalled          NotApproved
+{box.ad.piccola.us}   {3138910}                        NotInstalled          NotApproved
+{box.ad.piccola.us}   {3138962}                        NotInstalled          NotApproved
+{box.ad.piccola.us}   {3160005}                          Downloaded              Install
+{box.ad.piccola.us}   {3161561}                          Downloaded              Install
+{box.ad.piccola.us}   {3159398}                          Downloaded              Install
+{box.ad.piccola.us}   {3164035}                          Downloaded              Install
+{box.ad.piccola.us}   {3161664}                          Downloaded              Install
+{box.ad.piccola.us}   {3161949}                          Downloaded              Install
+{box.ad.piccola.us}   {3161958}                          Downloaded              Install
+{box.ad.piccola.us}   {3164033}                          Downloaded              Install
+{box.ad.piccola.us}   {3157569}                          Downloaded              Install
+{box.ad.piccola.us}   {3164294}                          Downloaded              Install
+{box.ad.piccola.us}   {3162343}                          Downloaded              Install
+{rproxy.piccola.us}   {3160005}                          Downloaded              Install
+{rproxy.piccola.us}   {3161561}                          Downloaded              Install
+{rproxy.piccola.us}   {3159398}                          Downloaded              Install
+{rproxy.piccola.us}   {3164035}                          Downloaded              Install
+{rproxy.piccola.us}   {3161664}                          Downloaded              Install
+{rproxy.piccola.us}   {3161949}                          Downloaded              Install
+{rproxy.piccola.us}   {3161958}                          Downloaded              Install
+{rproxy.piccola.us}   {3164033}                          Downloaded              Install
+{rproxy.piccola.us}   {3157569}                          Downloaded              Install
+{rproxy.piccola.us}   {3164294}                          Downloaded              Install
+{rproxy.piccola.us}   {3162343}                          Downloaded              Install
+{metro.ad.piccola.us} {3160005}                          Downloaded              Install
+{metro.ad.piccola.us} {3161561}                          Downloaded              Install
+{metro.ad.piccola.us} {3159398}                          Downloaded              Install
+{metro.ad.piccola.us} {3164035}                          Downloaded              Install
+{metro.ad.piccola.us} {3161664}                          Downloaded              Install
+{metro.ad.piccola.us} {3161949}                          Downloaded              Install
+{metro.ad.piccola.us} {3161958}                          Downloaded              Install
+{metro.ad.piccola.us} {3164033}                          Downloaded              Install
+{metro.ad.piccola.us} {3157569}                          Downloaded              Install
+{metro.ad.piccola.us} {3164294}                          Downloaded              Install
+{metro.ad.piccola.us} {3162343}                          Downloaded              Install
 ```
