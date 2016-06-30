@@ -645,6 +645,9 @@ Last Modified: 06.29.16
         [string[]]$UpdateInstallationState
         ,
         [Parameter(ValueFromPipelineByPropertyname)]
+        [string[]]$UpdateApprovalAction        
+        ,
+        [Parameter(ValueFromPipelineByPropertyname)]
         [string[]]$FullDomainName
     )
 
@@ -670,6 +673,7 @@ Last Modified: 06.29.16
             
             $update_props = @{
                 'UpdateInstallationState' = $UpdateInstallationState -join ','
+                'UpdateApprovalAction' = $UpdateApprovalAction -join ','
                 'FullDomainName' = $FullDomainName -join ','
                 'SecurityBulletins' = $SecurityBulletins -join ','
                 'UpdateSource' = $updateSearch.UpdateSource
