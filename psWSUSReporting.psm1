@@ -700,7 +700,8 @@ function Get-PoshWSUSGroupOverview
 Output a general compliance overview of a specific WSUS group regardless of approval status.
 
 .DESCRIPTION
-Output an object containing compliance info per server of an updated group. 
+Output an object containing compliance info per server of an updated group. Only note Critical, 
+Security, and Updates updates. 
 
 .EXAMPLE 
 Get-PoshWSUSGroupOverview -ID b147aa1d-424b-4baa-99c8-a7d7ef7a394f
