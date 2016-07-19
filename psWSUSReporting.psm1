@@ -1,4 +1,4 @@
-﻿function Connect-PoshWSUS
+﻿function Connect-psWSUSr
 {
 <#
 .SYNOPSIS
@@ -10,13 +10,13 @@ named $wsus to the parent variable scope. For connections to a local wsus server
 either the -hostname or -port parameter, bur rather simply use the -LocalConnection parameter.
 
 .EXAMPLE 
-Connect-PoshWSUS -HostName wsus.contoso.com -Port 8530
+Connect-psWSUSr -HostName wsus.contoso.com -Port 8530
 
 DESCRIPTION:
 Connect to a remote WSUS Server.
 
 .EXAMPLE 
-Connect-PoshWSUS -LocalConnection
+Connect-psWSUSr -LocalConnection
 
 DESCRIPTION:
 Connect to a local WSUS Server.
@@ -65,7 +65,7 @@ Last Modified: 06.23.16
     end {}
 }
 
-function Get-PoshWSUSComputerUpdates
+function Get-psWSUSrComputerUpdates
 {
 <#
 .SYNOPSIS
@@ -96,7 +96,7 @@ Updates that are not installed on the computer regardless of approval or local u
 (e.g. downloaded).
 
 .EXAMPLE 
-Get-PoshWSUSComputerUpdates -FullDomainName srv1.contoso.com -Needed
+Get-psWSUSrComputerUpdates -FullDomainName srv1.contoso.com -Needed
 
 DESCRIPTION:
 Query WSUS and get all the updates that srv1.contoso.com needs.
@@ -218,7 +218,7 @@ Last Modified: 06.24.16
     end {}
 }
 
-function Get-PoshWSUSGroupUpdateSummary
+function Get-psWSUSrGroupUpdateSummary
 {
 <#
 .SYNOPSIS
@@ -249,7 +249,7 @@ Updates that are not installed on the computer regardless of approval or local u
 (e.g. downloaded).
 
 .EXAMPLE 
-Get-PoshWSUSGroupUpdateSummary -UpdateGroup 'SCCM MS Servers' -NotApprovedAndNeeded
+Get-psWSUSrGroupUpdateSummary -UpdateGroup 'SCCM MS Servers' -NotApprovedAndNeeded
 
 DESCRIPTION:
 Query WSUS and get all the updates that are not approved and needed for the group 'SCCM MS Servers'
@@ -297,7 +297,7 @@ Last Modified: 06.24.16
     {
         try
         {
-            $UpdateGroupMembers = Get-PoshWSUSGroupMembers -Name $UpdateGroup
+            $UpdateGroupMembers = Get-psWSUSrGroupMembers -Name $UpdateGroup
             Write-Verbose "Successfully connected to $($script:wsus.Name)"
         }
         catch
@@ -311,23 +311,23 @@ Last Modified: 06.24.16
         {   
             if ($ApprovedDownloadedAndReadyForInstall)
             {
-                $computerUpdates = Get-PoshWSUSComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -ApprovedDownloadedAndReadyForInstall
+                $computerUpdates = Get-psWSUSrComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -ApprovedDownloadedAndReadyForInstall
             }
             elseif ($NotApprovedAndNeeded)
             {
-                $computerUpdates = Get-PoshWSUSComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -NotApprovedAndNeeded
+                $computerUpdates = Get-psWSUSrComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -NotApprovedAndNeeded
             }
             elseif ($AnyApprovedAndApplicable)
             {
-                $computerUpdates = Get-PoshWSUSComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -AnyApprovedAndApplicable
+                $computerUpdates = Get-psWSUSrComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -AnyApprovedAndApplicable
             }
             elseif ($ApprovedAndNeededButNotDownloaded)
             {
-                $computerUpdates = Get-PoshWSUSComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -ApprovedAndNeededButNotDownloaded
+                $computerUpdates = Get-psWSUSrComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -ApprovedAndNeededButNotDownloaded
             }
             elseif ($Needed)
             {
-                $computerUpdates = Get-PoshWSUSComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -Needed
+                $computerUpdates = Get-psWSUSrComputerUpdates -FullDomainName $UpdateGroupMember.FullDomainName -Needed
             }
             else
             {
@@ -346,7 +346,7 @@ Last Modified: 06.24.16
     end {}
 }
 
-function Get-PoshWSUSGroupMembers
+function Get-psWSUSrGroupMembers
 {
 <#
 .SYNOPSIS
@@ -357,7 +357,7 @@ Provided a WSUS group and get the members of it. This does not include members o
 downstream server!
 
 .EXAMPLE 
-Get-PoshWSUSGroupMembers -Name 'Contoso Exchange Servers'
+Get-psWSUSrGroupMembers -Name 'Contoso Exchange Servers'
 
 DESCRIPTION:
 Get all the members from the group 'Contoso Exchange Servers'.
@@ -412,7 +412,7 @@ Last Modified: 06/24/16
     end {}
 }
 
-function Get-PoshWSUSGroup
+function Get-psWSUSrGroup
 {
 <#
 .SYNOPSIS
@@ -423,13 +423,13 @@ Provided a WSUS group name go and get the group from WSUS. Use the -ListAll para
 all the groups. 
 
 .EXAMPLE 
-Get-PoshWSUSGroup -Name 'My Servers'
+Get-psWSUSrGroup -Name 'My Servers'
 
 DESCRIPTION:
 Search the KeePass database for a Title that matches Contoso and output the password for the entry.
 
 .EXAMPLE 
-Get-PoshWSUSGroup -ListAll
+Get-psWSUSrGroup -ListAll
 
 DESCRIPTION:
 Get all the groups on the WSUs servers.
@@ -491,7 +491,7 @@ Last Modified: 06.24.16
     end {}
 }
 
-function Approve-PoshWSUSUpdate
+function Approve-psWSUSrUpdate
 {     
 <#
 .SYNOPSIS
@@ -501,13 +501,13 @@ Approve an update for a WSUS group.
 Via the description ID for an updated approve the update for a specific WSUS group. 
 
 .EXAMPLE 
-Approve-PoshWSUSUpdate -UpdatedID 1234-56789-abcde-fghij-klmnop -UpdatedGroup "Server Group Uno"
+Approve-psWSUSrUpdate -UpdatedID 1234-56789-abcde-fghij-klmnop -UpdatedGroup "Server Group Uno"
 
 DESCRIPTION:
 Approve an updated for the group "Server Group Uno"
 
 .EXAMPLE 
-Get-PoshWSUSGroupUpdateSummary -UpdateGroup "Server Group Uno" -Needed | Approve-PoshWSUSUpdate -UpdateGroup "Server Group Uno"
+Get-psWSUSrGroupUpdateSummary -UpdateGroup "Server Group Uno" -Needed | Approve-psWSUSrUpdate -UpdateGroup "Server Group Uno"
 
 DESCRIPTION:
 Get all the udpates that are needed for the group "Server Group Uno" and approve them
@@ -537,13 +537,13 @@ Last Modified: 06.25.16
         
         if (!($script:AnyAllUpdates))
         {
-            Write-Warning "There doesn't seem to be any contents in `$AnyAllUpdates. Did you run Get-PoshWSUSServerUpdates?"
+            Write-Warning "There doesn't seem to be any contents in `$AnyAllUpdates. Did you run Get-psWSUSrServerUpdates?"
             break
         }             
     }
     process
     {
-        $uGroup = Get-PoshWSUSGroup -Name $UpdateGroup
+        $uGroup = Get-psWSUSrGroup -Name $UpdateGroup
         $patchMatch = $script:AnyAllUpdates | ?{$_.id.updateid -eq "$UpdateID"}
         if ($patchMatch)
         {
@@ -562,7 +562,7 @@ Last Modified: 06.25.16
     end {}
 }
 
-function Get-PoshWSUSServerUpdates
+function Get-psWSUSrServerUpdates
 {
 <#
 .SYNOPSIS
@@ -574,7 +574,7 @@ is needed for the updated. This cmdlet sets the variable $AnyAllUpdates in the p
 the updated info.  
 
 .EXAMPLE 
-Get-PoshWSUSServerUpdates 
+Get-psWSUSrServerUpdates 
 
 DESCRIPTION:
 Get all the updates for the WSUS server and store them in the variable $script:AnyAllUpdates.
@@ -607,7 +607,7 @@ Last Modified: 06.27.16
     end {}
 }
 
-function Get-PoshWSUSUpdateDetails
+function Get-psWSUSrUpdateDetails
 {
 <#
 .SYNOPSIS
@@ -617,13 +617,13 @@ Get additional info for an update.
 Provided an update ID search WSUS for the update
 
 .EXAMPLE 
-Get-PoshWSUSUpdateDetails -UpdatedID 1234-56789-abcde-fghij-klmnop
+Get-psWSUSrUpdateDetails -UpdatedID 1234-56789-abcde-fghij-klmnop
 
 DESCRIPTION:
 Get info for the update 1234-56789-abcde-fghij-klmnop
 
 .EXAMPLE 
-Get-PoshWSUSComputerUpdates -FullDomainName server.contoso.com -Needed | Get-PoshWSUSUpdateDetails
+Get-psWSUSrComputerUpdates -FullDomainName server.contoso.com -Needed | Get-psWSUSrUpdateDetails
 
 DESCRIPTION:
 Get info for the updates that server.consoso.com needs. 
@@ -661,7 +661,7 @@ Last Modified: 06.29.16
         }     
         if (!($script:AnyAllUpdates))
         {
-            Write-Warning "There doesn't seem to be any contents in `$AnyAllUpdates. Did you run Get-PoshWSUSServerUpdates?"
+            Write-Warning "There doesn't seem to be any contents in `$AnyAllUpdates. Did you run Get-psWSUSrServerUpdates?"
             break
         }
     }
@@ -693,7 +693,7 @@ Last Modified: 06.29.16
     end {}
 }
 
-function Get-PoshWSUSGroupOverview
+function Get-psWSUSrGroupOverview
 {
 <#
 .SYNOPSIS
@@ -704,16 +704,16 @@ Output an object containing compliance info per server of an updated group. Only
 Security, and Updates updates. 
 
 .EXAMPLE 
-Get-PoshWSUSGroupOverview -ID b147aa1d-424b-4baa-99c8-a7d7ef7a394f
+Get-psWSUSrGroupOverview -ID b147aa1d-424b-4baa-99c8-a7d7ef7a394f
 
 DESCRIPTION:
 Generate a compliance report for the group b147aa1d-424b-4baa-99c8-a7d7ef7a394f
 
 .EXAMPLE
-Get-PoshWSUSGroup 'Exchange Servers' | Get-PoshWSUSGroupOverview
+Get-psWSUSrGroup 'Exchange Servers' | Get-psWSUSrGroupOverview
 
 DESCRIPTION:
-Take a group from Get-PoshWSUSGroup and generate a compliance report. 
+Take a group from Get-psWSUSrGroup and generate a compliance report. 
 
 .NOTES
 Author: Joey Piccola
