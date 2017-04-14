@@ -1,4 +1,4 @@
-psWSUSReporting
+PoshWSUSReporting
 =============
 
 This module is used for generating server compliance info from WSUS. It can also be used to approve updates for WSUS groups. A majority of this was built from the guide provided by Boe Prox at https://blogs.technet.microsoft.com/heyscriptingguy/2012/01/16/introduction-to-wsus-and-powershell/.
@@ -9,7 +9,7 @@ This module is used for generating server compliance info from WSUS. It can also
 Get updates for a system that will be installed the next time the system installs updates
 
 ```PowerShell
-PS C:\blah> Get-psWSUSrComputerUpdates -FullDomainName box.ad.piccola.us -ApproveddownloadedAndReadyForInstall | select -First 2
+PS C:\blah> Get-PoshWSUSRComputerUpdates -FullDomainName box.ad.piccola.us -ApproveddownloadedAndReadyForInstall | select -First 2
 
 UpdateInstallationState   : Downloaded
 Title                     : Cumulative Security Update for Internet Explorer 11 for Windows Server 2012 R2 (KB3160005)
@@ -38,7 +38,7 @@ SecurityBulletins         : {MS16-075}
 For all the updates that could be applicable for members of the lab01.com WSUS group, list what is needed and calculate a compliance percentage.
 
 ```PowerShell
-PS C:\blah> Get-psWSUSrGroup -Name lab01.com  | Get-psWSUSrGroupOverview | ft FullDomainName,Compliance,TotalMissingUpdates,CriticalUpdates,SecurityUpdates,LastSyncTime
+PS C:\blah> Get-PoshWSUSRGroup -Name lab01.com  | Get-PoshWSUSRGroupOverview | ft FullDomainName,Compliance,TotalMissingUpdates,CriticalUpdates,SecurityUpdates,LastSyncTime
 0
 
 FullDomainName       Compliance TotalMissingUpdates CriticalUpdates SecurityUpdates LastSyncTime
@@ -58,7 +58,7 @@ dc01lab01.lab01.com  23.00 %                    154              15             
 List all udpates for all members of the WSUS group ad.piccola.us that are needed regardless of approval. E.g. approved and downloaded/not-downloaded or not even approved.
 
 ```PowerShell
-PS C:\blah> Get-psWSUSrGroup ad.piccola.us | Get-psWSUSrGroupMembers | Get-psWSUSrComputerUpdates -Needed | ft -a FullDomainName,KnowledgebaseArticles,UpdateInstallationState,UpdateApprovalAction
+PS C:\blah> Get-PoshWSUSRGroup ad.piccola.us | Get-PoshWSUSRGroupMembers | Get-PoshWSUSRComputerUpdates -Needed | ft -a FullDomainName,KnowledgebaseArticles,UpdateInstallationState,UpdateApprovalAction
 
 FullDomainName        KnowledgebaseArticles UpdateInstallationState UpdateApprovalAction
 --------------        --------------------- ----------------------- --------------------
