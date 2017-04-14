@@ -8,10 +8,12 @@ Describe 'Module Tests' {
         $? | Should Be $true
     }
 
-    It 'Should load' {
-        $Module = Get-Module 'PoshWSUSReporting'
-        $Module.Name | Should Be 'PoshWSUSReporting'
-        $Commands = $Module.ExportedCommands.Keys
-        $Commands -contains 'Approve-PoshWSUSRUpdate' | Should Be $True
-    }  
+    $Module = Get-Module 'PoshWSUSReporting'
+    $Module.Name | Should Be 'PoshWSUSReporting'
+    $Commands = $Module.ExportedCommands.Keys
+    foreach ($command in $commands) {
+        it "Should load $command" {
+            $commands -contains $command | should Be $true
+        }
+    }
 }
