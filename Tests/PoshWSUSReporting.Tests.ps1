@@ -8,12 +8,18 @@ Describe 'Module Tests' {
         $? | Should Be $true
     }
 
-    $Module = Get-Module 'PoshWSUSReporting'
-    $Module.Name | Should Be 'PoshWSUSReporting'
-    $Commands = $Module.ExportedCommands.Keys
-    foreach ($command in $commands) {
-        it "Should load $command" {
-            $commands -contains $command | should Be $true
-        }
+    It 'Should load' {
+        $Module = Get-Module 'PoshWSUSReporting'
+        $Module.Name | Should Be 'PoshWSUSReporting'
+        $Commands = $Module.ExportedCommands.Keys
+        $Commands -contains 'Approve-PoshWSUSRUpdate' | Should Be $True
+        $Commands -contains 'Connect-PoshWSUSR' | Should Be $True
+        $Commands -contains 'Get-PoshWSUSRComputerUpdates' | Should Be $True
+        $Commands -contains 'Get-PoshWSUSRGroup' | Should Be $True
+        $Commands -contains 'Get-PoshWSUSRGroupMembers' | Should Be $True
+        $Commands -contains 'Get-PoshWSUSRGroupOverview' | Should Be $True
+        $Commands -contains 'Get-PoshWSUSRGroupUpdateSummary' | Should Be $True
+        $Commands -contains 'Get-PoshWSUSRServerUpdates' | Should Be $True
+        $Commands -contains 'Get-PoshWSUSRUpdateDetails' | Should Be $True
     }
 }
